@@ -1,0 +1,102 @@
+.onboarding-container.large {
+  max-width: 900px;
+}
+
+.skills-section {
+  margin-bottom: 40px;
+  padding: 24px;
+  background: #f9fafb;
+  border-radius: 12px;
+}
+
+.skills-section h2 {
+  font-size: 24px;
+  color: #1f2937;
+  margin-bottom: 20px;
+}
+
+.skill-form .form-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr auto;
+  gap: 12px;
+  align-items: end;
+}
+
+.skills-list {
+  margin-top: 20px;
+  display: grid;
+  gap: 12px;
+}
+
+.skill-card {
+  background: white;
+  padding: 16px;
+  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border: 2px solid #e5e7eb;
+  transition: border-color 0.3s;
+}
+
+.skill-card:hover {
+  border-color: #4f46e5;
+}
+
+.skill-card.learning {
+  border-left: 4px solid #10b981;
+}
+
+.skill-info h3 {
+  font-size: 18px;
+  color: #1f2937;
+  margin-bottom: 8px;
+}
+
+.skill-details {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+
+.skill-exp {
+  font-size: 14px;
+  color: #6b7280;
+}
+
+.remove-btn {
+  background: #fee2e2;
+  color: #dc2626;
+  border: none;
+  width: 32px;
+  height: 32px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.remove-btn:hover {
+  background: #fecaca;
+}
+
+.progress-step.completed {
+  background: #10b981;
+  color: white;
+}
+
+.progress-line.active {
+  background: #4f46e5;
+}
+
+@media (max-width: 768px) {
+  .skill-form .form-row {
+    grid-template-columns: 1fr;
+  }
+
+  .skill-form .btn {
+    width: 100%;
+  }
+}
