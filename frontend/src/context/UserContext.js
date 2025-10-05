@@ -20,33 +20,28 @@ export const UserProvider = ({ children }) => {
 
   useEffect(() => {
     const initializeUser = async () => {
-      if (!isAuthenticated || !auth0User) {
-        setLoading(false);
-        return;
-      }
+      if (isAuthenticated) {
+        try {
+          const token = await getAccessTokenSilently({
+            authorizationParams: { audience: process.env.REACT_APP_AUTH0_AUDIENCE },
+          });
+          localStorage.setItem("auth_token", token);
 
-      try {
-        // Get access token
-        const token = await getAccessTokenSilently();
-        localStorage.setItem("auth_token", token);
-
-        // Get or create user in backend
-        const response = await userAPI.initUser(token); // Ensure token is passed to API
-        if (response?.data?.user) {
+          // Init or get user from backend
+          const response = await userAPI.initUser();
           setUser(response.data.user);
-          setIsNewUser(response.data.isNewUser || false);
-        } else {
-          console.error("No user returned from API:", response);
+          setIsNewUser(response.data.isNewUser);
+        } catch (error) {
+          console.error("Error initializing user:", error);
+        } finally {
+          setLoading(false);
         }
-      } catch (error) {
-        console.error("Error initializing user:", error);
-      } finally {
+      } else {
         setLoading(false);
       }
     };
-
     initializeUser();
-  }, [isAuthenticated, auth0User, getAccessTokenSilently]);
+  }, [isAuthenticated, getAccessTokenSilently]);
 
   const updateUser = (updatedData) => {
     setUser((prev) => ({ ...prev, ...updatedData }));
@@ -54,9 +49,8 @@ export const UserProvider = ({ children }) => {
 
   const refreshUser = async () => {
     try {
-      const token = await getAccessTokenSilently();
-      const response = await userAPI.getCurrentUser(token); // Pass token
-      if (response?.data?.user) setUser(response.data.user);
+      const response = await userAPI.getCurrentUser();
+      setUser(response.data.user);
     } catch (error) {
       console.error("Error refreshing user:", error);
     }
@@ -64,14 +58,7 @@ export const UserProvider = ({ children }) => {
 
   return (
     <UserContext.Provider
-      value={{
-        user,
-        loading,
-        isNewUser,
-        auth0User,
-        updateUser,
-        refreshUser,
-      }}
+      value={{ user, loading, isNewUser, auth0User, updateUser, refreshUser }}
     >
       {children}
     </UserContext.Provider>

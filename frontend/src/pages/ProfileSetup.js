@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { userAPI } from "../services/api";
-import { Upload, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import "./ProfileSetup.css";
 
 const ProfileSetup = () => {
@@ -11,6 +11,7 @@ const ProfileSetup = () => {
 
   const [formData, setFormData] = useState({
     name: user?.profile?.name || "",
+    email: user?.profile?.email || "", // Added email
     dob: "",
     phone: "",
     city: "",
@@ -38,6 +39,7 @@ const ProfileSetup = () => {
       const profileData = {
         profile: {
           name: formData.name,
+          email: formData.email, // Send email
           dob: formData.dob,
           phone: formData.phone,
           location: {
@@ -52,6 +54,7 @@ const ProfileSetup = () => {
       updateUser(response.data.user);
       navigate("/onboarding/skills");
     } catch (err) {
+      console.error("Profile update error: ", err.response?.data || err);
       setError(err.response?.data?.error || "Failed to update profile");
     } finally {
       setLoading(false);
@@ -84,6 +87,19 @@ const ProfileSetup = () => {
                 className="form-input"
                 value={formData.name}
                 onChange={handleChange}
+                required
+              />
+            </div>
+
+            <div className="form-group">
+              <label className="form-label">Email *</label>
+              <input
+                type="email"
+                name="email"
+                className="form-input"
+                value={formData.email}
+                onChange={handleChange}
+                placeholder="you@example.com"
                 required
               />
             </div>
