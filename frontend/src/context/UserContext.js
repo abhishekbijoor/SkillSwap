@@ -13,39 +13,40 @@ export const useUser = () => {
 };
 
 export const UserProvider = ({ children }) => {
-  const {
-    isAuthenticated,
-    getAccessTokenSilently,
-    user: auth0User,
-  } = useAuth0();
+  const { isAuthenticated, getAccessTokenSilently, user: auth0User } = useAuth0();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
   const [isNewUser, setIsNewUser] = useState(false);
 
   useEffect(() => {
     const initializeUser = async () => {
-      if (isAuthenticated) {
-        try {
-          // Get access token
-          const token = await getAccessTokenSilently();
-          localStorage.setItem("auth_token", token);
+      if (!isAuthenticated || !auth0User) {
+        setLoading(false);
+        return;
+      }
 
-          // Get or create user in database
-          const response = await userAPI.initUser();
+      try {
+        // Get access token
+        const token = await getAccessTokenSilently();
+        localStorage.setItem("auth_token", token);
+
+        // Get or create user in backend
+        const response = await userAPI.initUser(token); // Ensure token is passed to API
+        if (response?.data?.user) {
           setUser(response.data.user);
-          setIsNewUser(response.data.isNewUser);
-        } catch (error) {
-          console.error("Error initializing user:", error);
-        } finally {
-          setLoading(false);
+          setIsNewUser(response.data.isNewUser || false);
+        } else {
+          console.error("No user returned from API:", response);
         }
-      } else {
+      } catch (error) {
+        console.error("Error initializing user:", error);
+      } finally {
         setLoading(false);
       }
     };
 
     initializeUser();
-  }, [isAuthenticated, getAccessTokenSilently]);
+  }, [isAuthenticated, auth0User, getAccessTokenSilently]);
 
   const updateUser = (updatedData) => {
     setUser((prev) => ({ ...prev, ...updatedData }));
@@ -53,8 +54,9 @@ export const UserProvider = ({ children }) => {
 
   const refreshUser = async () => {
     try {
-      const response = await userAPI.getCurrentUser();
-      setUser(response.data.user);
+      const token = await getAccessTokenSilently();
+      const response = await userAPI.getCurrentUser(token); // Pass token
+      if (response?.data?.user) setUser(response.data.user);
     } catch (error) {
       console.error("Error refreshing user:", error);
     }
