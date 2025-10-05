@@ -1,7 +1,9 @@
 require('dotenv').config();
 const express = require("express");
 const cors = require("cors");
-const userRoutes = require("./routes/userRoutes"); // adjust the path
+const userRoutes = require("./routes/userRoutes");
+const matchRoutes = require("./routes/matchRoutes");
+const sessionRoutes = require("./routes/sessionRoutes");
 const connectDB = require("./config/database");
 
 const app = express();
@@ -29,6 +31,8 @@ app.get("/api/health", (req, res) => {
 
 // Routes
 app.use("/api/users", userRoutes);
+app.use("/api/match", matchRoutes);
+app.use("/api/sessions", sessionRoutes);
 
 // Error handling middleware
 app.use((err, req, res, next) => {

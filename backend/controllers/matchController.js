@@ -5,7 +5,7 @@ const axios = require("axios");
 const callGeminiAPI = async (prompt) => {
   try {
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         contents: [
           {
@@ -46,7 +46,7 @@ const callGeminiAPI = async (prompt) => {
 // Find skill matches
 exports.findMatches = async (req, res) => {
   try {
-    const { sub: auth0_id } = req.auth;
+    const auth0_id = req.auth?.payload?.sub || "dev-user-123";
     const { skill_query, filters = {} } = req.body;
 
     // Get current user
@@ -101,54 +101,63 @@ exports.findMatches = async (req, res) => {
     }));
 
     // Construct Gemini prompt
-    const prompt = `You are a skill-matching AI assistant for a skill exchange platform.
+    const prompt = `You are an expert skill-matching AI for SkillSwap, a peer-to-peer learning platform.
 
 CURRENT USER PROFILE:
 - Name: ${currentUser.profile.name}
 - Skills they can teach: ${
       currentUser.skills_teaching
-        .map((s) => `${s.name} (${s.proficiency})`)
+        .map((s) => `${s.name} (${s.proficiency}, ${s.years_experience} years)`)
         .join(", ") || "None listed"
     }
 - Skills they want to learn: ${
-      currentUser.skills_learning.map((s) => s.name).join(", ") || "None listed"
+      currentUser.skills_learning.map((s) => `${s.name} (${s.current_level}, goal: ${s.goal})`).join(", ") || "None listed"
     }
+- Current rating: ${currentUser.stats.avg_rating}/5
 - Search query: "${skill_query || "General matching"}"
 
-POTENTIAL MATCHES:
+POTENTIAL MATCHES (${candidatesData.length} candidates):
 ${candidatesData
   .map(
     (user, idx) => `
-${idx + 1}. User: ${user.name}
-   - Can teach: ${user.skills_teaching}
-   - Wants to learn: ${user.skills_learning}
-   - Verified: ${user.verification}
-   - Rating: ${user.avg_rating}/5
+${idx + 1}. ID: ${user.user_id}
+   Name: ${user.name}
+   Can teach: ${user.skills_teaching || "None"}
+   Wants to learn: ${user.skills_learning || "None"}
+   Verified: ${user.verification}
+   Rating: ${user.avg_rating}/5
 `
   )
   .join("\n")}
 
-TASK:
-Analyze compatibility and rank these users. Consider:
-1. Complementary skills (what they teach vs what current user wants to learn)
-2. Mutual exchange potential (both can teach each other)
-3. Proficiency levels (ensure teacher is advanced enough)
-4. Verification status and ratings
+MATCHING CRITERIA (prioritize in this order):
+1. COMPLEMENTARY SKILLS: Match users where one teaches what the other wants to learn
+2. MUTUAL BENEFIT: Both users can exchange valuable skills (bidirectional learning)
+3. PROFICIENCY MATCH: Teacher should have higher proficiency than learner's current level
+4. QUALITY INDICATORS: Consider ratings and verification status
+5. SKILL RELEVANCE: Skills should align with the search query
 
-Return ONLY valid JSON (no markdown formatting) in this exact format:
+RESPONSE FORMAT:
+Return ONLY valid JSON (no markdown code blocks, no explanations). Use this exact structure:
 {
   "matches": [
     {
-      "user_id": "exact_user_id_from_list",
-      "compatibility_score": 8.5,
-      "explanation": "Brief natural explanation why they match",
-      "complementary_skills": ["Skill1 ↔ Skill2"],
+      "user_id": "exact_user_id_from_candidates_list",
+      "compatibility_score": 9.2,
+      "explanation": "Concise, friendly 1-2 sentence explanation focusing on specific skill matches and mutual benefits",
+      "complementary_skills": ["React (Advanced) ↔ Python (Beginner)", "Node.js (Expert) ↔ JavaScript (Intermediate)"],
       "mutual_benefit": true
     }
   ]
 }
 
-Rank by compatibility_score (0-10). Return top 10 matches only.`;
+SCORING GUIDE:
+- 9-10: Perfect match with multiple complementary skills and mutual benefit
+- 7-8.9: Strong match with 1-2 complementary skills
+- 5-6.9: Moderate match with some skill overlap
+- Below 5: Weak match, likely skip
+
+Return top 10 matches ranked by compatibility_score (highest first). Only include matches with score >= 5.0.`;
 
     // Call Gemini API
     const geminiResponse = await callGeminiAPI(prompt);
@@ -187,7 +196,7 @@ Rank by compatibility_score (0-10). Return top 10 matches only.`;
 // Get match explanation (detailed view)
 exports.getMatchExplanation = async (req, res) => {
   try {
-    const { sub: auth0_id } = req.auth;
+    const auth0_id = req.auth?.payload?.sub || "dev-user-123";
     const { target_user_id } = req.params;
 
     const currentUser = await User.findOne({ auth0_id });
