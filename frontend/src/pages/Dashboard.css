@@ -1,130 +1,236 @@
+/* 🏡 Dashboard - Your Growth Map */
+
 .dashboard {
   min-height: 100vh;
-  background: #f9fafb;
+  background: transparent;
+  animation: fadeInUp 0.8s ease-out;
 }
 
+/* ========================================
+   HEADER - Floating Navigation
+   ======================================== */
 .dashboard-header {
-  background: white;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  padding: 20px 0;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(40px) saturate(180%);
+  box-shadow: var(--shadow-ground);
+  padding: var(--space-sm) 0;
   position: sticky;
   top: 0;
   z-index: 100;
+  border-bottom: 1px solid var(--mist-gray);
 }
 
 .header-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 var(--space-md);
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  color: var(--soil-dark);
+  font-weight: 700;
+}
+
+.logo-icon {
+  font-size: 1.5rem;
+  animation: pulse 3s ease-in-out infinite;
 }
 
 .nav-menu {
   display: flex;
-  gap: 12px;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
 }
 
 .nav-link {
-  background: transparent;
-  border: none;
-  padding: 8px 16px;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  padding: 10px 18px;
+  border-radius: var(--radius-soft);
   cursor: pointer;
   display: flex;
   align-items: center;
-  gap: 8px;
-  color: #6b7280;
-  font-size: 14px;
-  font-weight: 500;
-  transition: all 0.3s;
+  gap: var(--space-xs);
+  color: var(--clay-medium);
+  font-size: var(--text-small);
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: var(--font-body);
 }
 
 .nav-link:hover {
-  background: #f3f4f6;
-  color: #4f46e5;
+  background: white;
+  color: var(--growth-teal);
+  border-color: var(--growth-teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lifted);
 }
 
+.nav-link.active {
+  background: var(--gradient-growth);
+  color: white;
+  border-color: transparent;
+}
+
+/* ========================================
+   WELCOME SECTION - Garden Entrance
+   ======================================== */
 .dashboard-content {
-  padding: 40px 20px;
+  padding: var(--space-lg) var(--space-md);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .welcome-section {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: var(--gradient-warm);
   color: white;
-  padding: 40px;
-  border-radius: 16px;
-  margin-bottom: 32px;
+  padding: var(--space-lg);
+  border-radius: var(--radius-organic);
+  margin-bottom: var(--space-lg);
   display: flex;
   justify-content: space-between;
   align-items: center;
+  box-shadow: var(--shadow-lifted);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.welcome-section::before {
+  content: '🌅';
+  position: absolute;
+  font-size: 8rem;
+  right: -20px;
+  top: -20px;
+  opacity: 0.15;
+  pointer-events: none;
 }
 
 .welcome-text h2 {
-  font-size: 32px;
-  margin-bottom: 8px;
+  font-size: var(--text-h1);
+  margin-bottom: var(--space-xs);
+  color: white;
+  font-weight: 800;
 }
 
 .welcome-text p {
-  font-size: 18px;
-  opacity: 0.9;
+  font-size: var(--text-h3);
+  opacity: 0.95;
+  color: rgba(255, 255, 255, 0.95);
+  font-weight: 400;
 }
 
 .verification-status {
   display: flex;
-  gap: 8px;
+  gap: var(--space-xs);
+  flex-wrap: wrap;
 }
 
+/* ========================================
+   STATS GRID - Impact Garden
+   ======================================== */
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
-  margin-bottom: 40px;
+  grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+  gap: var(--space-md);
+  margin-bottom: var(--space-lg);
 }
 
 .stat-card {
-  background: white;
-  padding: 24px;
-  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: var(--space-md);
+  border-radius: var(--radius-organic);
   display: flex;
   align-items: center;
-  gap: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  gap: var(--space-sm);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: sprout 0.6s ease-out;
+  animation-fill-mode: both;
+}
+
+.stat-card:nth-child(1) { animation-delay: 0.1s; }
+.stat-card:nth-child(2) { animation-delay: 0.2s; }
+.stat-card:nth-child(3) { animation-delay: 0.3s; }
+.stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+.stat-card:hover {
+  transform: translateY(-6px) scale(1.02);
+  box-shadow: var(--shadow-floating);
 }
 
 .stat-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  width: 56px;
+  height: 56px;
+  border-radius: var(--radius-soft);
+  background: var(--gradient-growth);
   color: white;
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-shrink: 0;
+  box-shadow: 0 4px 12px rgba(44, 185, 169, 0.25);
+}
+
+.stat-card:hover .stat-icon {
+  animation: pulse 1s ease-in-out;
 }
 
 .stat-info h3 {
-  font-size: 28px;
-  color: #1f2937;
+  font-size: var(--text-h1);
+  color: var(--soil-dark);
   margin-bottom: 4px;
+  font-weight: 800;
+  font-family: var(--font-display);
 }
 
 .stat-info p {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--text-small);
+  color: var(--clay-medium);
+  font-weight: 500;
 }
 
+/* ========================================
+   SEARCH SECTION - Garden Path Finder
+   ======================================== */
 .search-section {
-  background: white;
-  padding: 40px;
-  border-radius: 16px;
-  margin-bottom: 32px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: var(--space-lg);
+  border-radius: var(--radius-organic);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .search-section h2 {
-  font-size: 24px;
-  color: #1f2937;
-  margin-bottom: 24px;
+  font-size: var(--text-h2);
+  color: var(--soil-dark);
+  margin-bottom: var(--space-md);
   text-align: center;
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.search-section h2::after {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 4px;
+  background: var(--gradient-growth);
+  margin: var(--space-sm) auto 0;
+  border-radius: var(--radius-full);
 }
 
 .search-form {
@@ -135,97 +241,210 @@
 .search-input-group {
   position: relative;
   display: flex;
-  gap: 12px;
-  align-items: center;
+  gap: var(--space-sm);
+  align-items: stretch;
 }
 
 .search-icon {
   position: absolute;
-  left: 16px;
-  color: #6b7280;
+  left: 20px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--clay-medium);
+  z-index: 1;
 }
 
 .search-input {
   flex: 1;
-  padding: 16px 16px 16px 48px;
-  border: 2px solid #e5e7eb;
-  border-radius: 12px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  padding: 18px 20px 18px 54px;
+  border: 2px solid var(--mist-gray);
+  border-radius: var(--radius-soft);
+  font-size: var(--text-body);
+  font-family: var(--font-body);
+  background: white;
+  transition: all 0.3s ease;
+  color: var(--soil-dark);
 }
 
 .search-input:focus {
   outline: none;
-  border-color: #4f46e5;
+  border-color: var(--growth-teal);
+  box-shadow: 0 0 0 3px rgba(44, 185, 169, 0.1);
+  transform: translateY(-1px);
 }
 
+.search-input::placeholder {
+  color: var(--clay-medium);
+  opacity: 0.6;
+  font-style: italic;
+}
+
+/* ========================================
+   QUICK ACTIONS - Garden Tools
+   ======================================== */
 .quick-actions {
-  background: white;
-  padding: 32px;
-  border-radius: 16px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: var(--space-lg);
+  border-radius: var(--radius-organic);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: var(--space-lg);
 }
 
 .quick-actions h3 {
-  font-size: 20px;
-  color: #1f2937;
-  margin-bottom: 24px;
+  font-size: var(--text-h2);
+  color: var(--soil-dark);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: 700;
 }
 
 .skills-overview {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 32px;
+  gap: var(--space-lg);
+}
+
+.skills-column {
+  position: relative;
 }
 
 .skills-column h4 {
-  font-size: 16px;
-  color: #6b7280;
-  margin-bottom: 16px;
+  font-size: var(--text-h3);
+  color: var(--soil-dark);
+  margin-bottom: var(--space-sm);
+  font-family: var(--font-display);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+}
+
+.skills-column h4::before {
+  content: '🌱';
+  font-size: 1.25rem;
+}
+
+.skills-column:last-child h4::before {
+  content: '🌸';
 }
 
 .skill-tags {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-xs);
 }
 
 .skill-tag {
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 14px;
-  font-weight: 500;
+  padding: 10px 18px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-small);
+  font-weight: 600;
+  transition: all 0.3s ease;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  backdrop-filter: blur(8px);
+}
+
+.skill-tag:hover {
+  transform: scale(1.05) rotate(-2deg);
+  animation: wiggle 0.5s ease;
 }
 
 .skill-tag.teaching {
-  background: #ede9fe;
-  color: #7c3aed;
+  background: rgba(44, 185, 169, 0.15);
+  color: var(--growth-teal);
+  border: 1px solid rgba(44, 185, 169, 0.3);
 }
 
 .skill-tag.learning {
-  background: #d1fae5;
-  color: #059669;
+  background: rgba(248, 90, 62, 0.15);
+  color: var(--bloom-coral);
+  border: 1px solid rgba(248, 90, 62, 0.3);
 }
 
 .proficiency,
 .goal {
-  font-size: 12px;
+  font-size: var(--text-tiny);
   opacity: 0.8;
+  font-weight: 500;
 }
 
+/* ========================================
+   EMPTY STATES - Gentle Prompts
+   ======================================== */
+.empty-state {
+  text-align: center;
+  padding: var(--space-xl) var(--space-md);
+  color: var(--clay-medium);
+}
+
+.empty-state-icon {
+  font-size: 4rem;
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
+}
+
+.empty-state h3 {
+  font-size: var(--text-h2);
+  color: var(--soil-dark);
+  margin-bottom: var(--space-xs);
+}
+
+.empty-state p {
+  font-size: var(--text-body);
+  max-width: 400px;
+  margin: 0 auto var(--space-md);
+}
+
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 @media (max-width: 768px) {
-  .welcome-section {
+  .dashboard-header {
+    padding: var(--space-sm) 0;
+  }
+
+  .header-content {
     flex-direction: column;
-    text-align: center;
-    gap: 16px;
+    gap: var(--space-sm);
+    align-items: flex-start;
   }
 
   .nav-menu {
+    width: 100%;
+    flex-direction: row;
+    overflow-x: auto;
+    padding-bottom: var(--space-xs);
+  }
+
+  .nav-link {
+    white-space: nowrap;
+  }
+
+  .welcome-section {
     flex-direction: column;
+    text-align: center;
+    gap: var(--space-md);
+    padding: var(--space-md);
+  }
+
+  .welcome-section::before {
+    font-size: 6rem;
+    right: 50%;
+    transform: translateX(50%);
+  }
+
+  .stats-grid {
+    grid-template-columns: 1fr;
   }
 
   .search-input-group {
     flex-direction: column;
+    align-items: stretch;
   }
 
   .search-input-group .btn {
@@ -234,5 +453,125 @@
 
   .skills-overview {
     grid-template-columns: 1fr;
+    gap: var(--space-md);
   }
+
+  .dashboard-content {
+    padding: var(--space-md) var(--space-sm);
+  }
+}
+
+/* ========================================
+   PROFILE BUTTON - User Actions
+   ======================================== */
+.user-profile-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  padding: 8px 16px;
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--mist-gray);
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--soil-dark);
+}
+
+.user-profile-btn:hover {
+  background: white;
+  border-color: var(--growth-teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lifted);
+}
+
+.user-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--gradient-growth);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: var(--text-small);
+}
+
+/* ========================================
+   SKILL PROGRESS - Learning Journey
+   ======================================== */
+.learning-path {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  padding: var(--space-lg);
+  border-radius: var(--radius-organic);
+  margin-bottom: var(--space-lg);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.learning-path h3 {
+  font-size: var(--text-h2);
+  color: var(--soil-dark);
+  margin-bottom: var(--space-md);
+  font-family: var(--font-display);
+  font-weight: 700;
+}
+
+.progress-path {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  overflow-x: auto;
+  padding: var(--space-sm) 0;
+}
+
+.progress-node {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  background: var(--mist-gray);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  color: var(--clay-medium);
+  transition: all 0.3s ease;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+
+.progress-node.completed {
+  background: var(--gradient-growth);
+  color: white;
+  box-shadow: 0 4px 12px rgba(44, 185, 169, 0.25);
+  animation: bloom 0.6s ease-out;
+}
+
+.progress-node:hover {
+  transform: scale(1.15);
+  animation: pulse 1s ease-in-out;
+}
+
+.progress-line {
+  flex: 1;
+  height: 3px;
+  background: var(--mist-gray);
+  border-radius: var(--radius-full);
+  min-width: 30px;
+}
+
+.progress-line.active {
+  background: var(--gradient-growth);
+}
+
+.progress-percentage {
+  font-size: var(--text-body);
+  color: var(--growth-teal);
+  font-weight: 700;
+  margin-top: var(--space-sm);
 }

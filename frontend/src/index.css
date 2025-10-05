@@ -1,3 +1,70 @@
+/* 🌱 SkillSwap - The Learning Garden Design System */
+
+/* ========================================
+   1. FONTS
+   ======================================== */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap');
+@import url('https://api.fontshare.com/v2/css?f[]=cabinet-grotesk@800,700,500&display=swap');
+
+/* ========================================
+   2. CSS VARIABLES - THE LEARNING GARDEN
+   ======================================== */
+:root {
+  /* Color Palette: Earthen Warmth */
+  --soil-dark: #2C2416;
+  --clay-medium: #5C4D3C;
+  --sand-light: #FAF5EF;
+  --growth-teal: #2CB9A9;
+  --bloom-coral: #F85A3E;
+  --sprout-green: #6B9E78;
+  --sunset-amber: #E8A87C;
+  --mist-gray: #E5DFD9;
+
+  /* Legacy color mapping for backward compatibility */
+  --teal-500: #2CB9A9;
+  --teal-600: #249989;
+  --teal-700: #1D7A6E;
+  --coral-500: #F85A3E;
+  --coral-600: #E8432E;
+
+  /* Typography */
+  --font-display: 'Cabinet Grotesk', -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-body: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+
+  --text-hero: clamp(2.5rem, 5vw, 4rem);
+  --text-h1: clamp(1.75rem, 3vw, 2.5rem);
+  --text-h2: 1.5rem;
+  --text-h3: 1.25rem;
+  --text-body: 1rem;
+  --text-small: 0.875rem;
+  --text-tiny: 0.75rem;
+
+  /* Organic Spacing */
+  --space-xs: 8px;
+  --space-sm: 16px;
+  --space-md: 24px;
+  --space-lg: 48px;
+  --space-xl: 80px;
+
+  /* Rounded Organic Shapes */
+  --radius-soft: 20px;
+  --radius-organic: 28px;
+  --radius-full: 9999px;
+
+  /* Shadows - Like Soil Layers */
+  --shadow-ground: 0 2px 8px rgba(44, 36, 22, 0.08);
+  --shadow-lifted: 0 8px 24px rgba(44, 36, 22, 0.12);
+  --shadow-floating: 0 16px 48px rgba(44, 36, 22, 0.16);
+
+  /* Gradients */
+  --gradient-warm: linear-gradient(135deg, var(--bloom-coral) 0%, var(--sunset-amber) 100%);
+  --gradient-growth: linear-gradient(135deg, var(--growth-teal) 0%, var(--sprout-green) 100%);
+  --gradient-earth: linear-gradient(180deg, var(--sand-light) 0%, #FFF9F0 100%);
+}
+
+/* ========================================
+   3. BASE STYLES
+   ======================================== */
 * {
   margin: 0;
   padding: 0;
@@ -5,132 +72,445 @@
 }
 
 body {
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: #f5f7fa;
+  background: var(--gradient-earth);
+  background-attachment: fixed;
+  color: var(--soil-dark);
+  line-height: 1.6;
+  overflow-x: hidden;
 }
 
 code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
+  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New", monospace;
 }
 
-/* Mobile First Responsive Design */
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-display);
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--soil-dark);
+}
+
+h1 { font-size: var(--text-h1); }
+h2 { font-size: var(--text-h2); }
+h3 { font-size: var(--text-h3); }
+
+p {
+  color: var(--clay-medium);
+  line-height: 1.7;
+}
+
+/* ========================================
+   4. LAYOUT
+   ======================================== */
 .container {
   width: 100%;
   max-width: 1200px;
   margin: 0 auto;
-  padding: 20px;
+  padding: var(--space-md);
 }
 
 @media (max-width: 768px) {
   .container {
-    padding: 15px;
+    padding: var(--space-sm);
   }
 }
 
-/* Utility Classes */
+/* ========================================
+   5. BUTTONS - GROWTH PULSE
+   ======================================== */
 .btn {
-  padding: 12px 24px;
+  padding: 14px 32px;
   border: none;
-  border-radius: 8px;
-  font-size: 16px;
+  border-radius: var(--radius-soft);
+  font-size: var(--text-body);
   font-weight: 600;
+  font-family: var(--font-body);
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
 }
 
 .btn-primary {
-  background-color: #4f46e5;
+  background: var(--gradient-warm);
   color: white;
+  box-shadow: var(--shadow-ground);
 }
 
 .btn-primary:hover {
-  background-color: #4338ca;
-  transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+  transform: translateY(-3px) scale(1.02);
+  box-shadow: 0 12px 28px rgba(248, 90, 62, 0.3);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px) scale(0.98);
 }
 
 .btn-secondary {
-  background-color: #e5e7eb;
-  color: #374151;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  color: var(--soil-dark);
+  border: 2px solid var(--mist-gray);
 }
 
 .btn-secondary:hover {
-  background-color: #d1d5db;
-}
-
-.card {
   background: white;
-  border-radius: 12px;
-  padding: 24px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  border-color: var(--growth-teal);
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-lifted);
 }
 
+.btn-full {
+  width: 100%;
+  justify-content: center;
+}
+
+/* Button Ripple Effect */
+.btn::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 0;
+  height: 0;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.3);
+  transform: translate(-50%, -50%);
+  transition: width 0.6s, height 0.6s;
+}
+
+.btn:active::before {
+  width: 300px;
+  height: 300px;
+}
+
+/* ========================================
+   6. CARDS - ORGANIC CONTAINERS
+   ======================================== */
+.card {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-radius: var(--radius-organic);
+  padding: var(--space-md);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  margin-bottom: var(--space-md);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  animation: sprout 0.6s ease-out;
+}
+
+.card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-floating);
+}
+
+@keyframes sprout {
+  from {
+    opacity: 0;
+    transform: translateY(20px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* ========================================
+   7. BADGES - SKILL MARKERS
+   ======================================== */
 .badge {
-  display: inline-block;
-  padding: 4px 12px;
-  border-radius: 12px;
-  font-size: 12px;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 14px;
+  border-radius: var(--radius-full);
+  font-size: var(--text-small);
   font-weight: 600;
   margin: 4px;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(8px);
+}
+
+.badge:hover {
+  transform: scale(1.05);
+  animation: wiggle 0.5s ease;
+}
+
+@keyframes wiggle {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-3deg); }
+  75% { transform: rotate(3deg); }
 }
 
 .badge-verified {
-  background-color: #10b981;
+  background: linear-gradient(135deg, rgba(44, 185, 169, 0.9) 0%, rgba(107, 158, 120, 0.9) 100%);
   color: white;
+  box-shadow: 0 4px 12px rgba(44, 185, 169, 0.25);
 }
 
 .badge-skill {
-  background-color: #e0e7ff;
-  color: #4f46e5;
+  background: rgba(44, 185, 169, 0.15);
+  color: var(--growth-teal);
+  border: 1px solid rgba(44, 185, 169, 0.3);
 }
 
-/* Form Styles */
+.badge-coral {
+  background: rgba(248, 90, 62, 0.15);
+  color: var(--bloom-coral);
+  border: 1px solid rgba(248, 90, 62, 0.3);
+}
+
+/* ========================================
+   8. FORMS - ORGANIC INPUT FIELDS
+   ======================================== */
 .form-group {
-  margin-bottom: 20px;
+  margin-bottom: var(--space-md);
 }
 
 .form-label {
   display: block;
-  margin-bottom: 8px;
+  margin-bottom: var(--space-xs);
   font-weight: 600;
-  color: #374151;
+  color: var(--soil-dark);
+  font-size: var(--text-small);
 }
 
-.form-input {
+.form-input,
+.form-select,
+.form-textarea {
   width: 100%;
-  padding: 12px;
-  border: 2px solid #e5e7eb;
-  border-radius: 8px;
-  font-size: 16px;
-  transition: border-color 0.3s;
+  padding: 14px 18px;
+  border: 2px solid var(--mist-gray);
+  border-radius: var(--radius-soft);
+  font-size: var(--text-body);
+  font-family: var(--font-body);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+  color: var(--soil-dark);
 }
 
-.form-input:focus {
+.form-input:focus,
+.form-select:focus,
+.form-textarea:focus {
   outline: none;
-  border-color: #4f46e5;
+  border-color: var(--growth-teal);
+  background: white;
+  box-shadow: 0 0 0 3px rgba(44, 185, 169, 0.1);
+  transform: translateY(-1px);
 }
 
-/* Loading Spinner */
+.form-input::placeholder {
+  color: var(--clay-medium);
+  opacity: 0.6;
+}
+
+.form-textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+/* ========================================
+   9. LOADING STATES - GROWING VINE
+   ======================================== */
+.loading-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 400px;
+  gap: var(--space-md);
+}
+
 .spinner {
-  border: 4px solid #f3f3f3;
-  border-top: 4px solid #4f46e5;
+  width: 50px;
+  height: 50px;
+  border: 4px solid var(--mist-gray);
+  border-top: 4px solid var(--growth-teal);
   border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
+  animation: spin 1s cubic-bezier(0.68, -0.55, 0.265, 1.55) infinite;
 }
 
 @keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-message {
+  font-size: var(--text-body);
+  color: var(--clay-medium);
+  font-weight: 500;
+}
+
+/* Growing Vine Loader (Alternative) */
+.vine-loader {
+  width: 200px;
+  height: 4px;
+  background: var(--mist-gray);
+  border-radius: var(--radius-full);
+  overflow: hidden;
+  position: relative;
+}
+
+.vine-loader::before {
+  content: '🌿';
+  position: absolute;
+  top: -8px;
+  left: 0;
+  animation: grow 2s ease-in-out infinite;
+}
+
+@keyframes grow {
+  0% { left: 0; }
+  100% { left: calc(100% - 20px); }
+}
+
+/* ========================================
+   10. UTILITIES
+   ======================================== */
+.text-center { text-align: center; }
+.text-left { text-align: left; }
+.text-right { text-align: right; }
+
+.mb-xs { margin-bottom: var(--space-xs); }
+.mb-sm { margin-bottom: var(--space-sm); }
+.mb-md { margin-bottom: var(--space-md); }
+.mb-lg { margin-bottom: var(--space-lg); }
+
+.mt-xs { margin-top: var(--space-xs); }
+.mt-sm { margin-top: var(--space-sm); }
+.mt-md { margin-top: var(--space-md); }
+.mt-lg { margin-top: var(--space-lg); }
+
+.flex { display: flex; }
+.flex-column { flex-direction: column; }
+.items-center { align-items: center; }
+.justify-center { justify-content: center; }
+.gap-xs { gap: var(--space-xs); }
+.gap-sm { gap: var(--space-sm); }
+.gap-md { gap: var(--space-md); }
+
+/* ========================================
+   11. ANIMATIONS - EMOTIONAL INTERACTIONS
+   ======================================== */
+
+/* Bloom Animation (Success States) */
+@keyframes bloom {
   0% {
-    transform: rotate(0deg);
+    transform: scale(0) rotate(-180deg);
+    opacity: 0;
+  }
+  60% {
+    transform: scale(1.2) rotate(10deg);
   }
   100% {
-    transform: rotate(360deg);
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
   }
+}
+
+.bloom-enter {
+  animation: bloom 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+/* Fade In Up (Page Transitions) */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.fade-in-up {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+/* Breathing Glow (Avatar Circles) */
+@keyframes breathe {
+  0%, 100% {
+    opacity: 0.8;
+    box-shadow: 0 0 0 rgba(44, 185, 169, 0);
+  }
+  50% {
+    opacity: 1;
+    box-shadow: 0 0 20px rgba(44, 185, 169, 0.3);
+  }
+}
+
+.breathe {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Pulse (Active Elements) */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+}
+
+.pulse {
+  animation: pulse 2s ease-in-out infinite;
+}
+
+/* ========================================
+   12. BACK BUTTON - CONSISTENT ACROSS PAGES
+   ======================================== */
+.back-btn {
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border: 2px solid var(--mist-gray);
+  padding: 12px 20px;
+  border-radius: var(--radius-soft);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin-bottom: var(--space-md);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--font-body);
+  font-weight: 600;
+  color: var(--soil-dark);
+}
+
+.back-btn:hover {
+  border-color: var(--growth-teal);
+  color: var(--growth-teal);
+  transform: translateY(-2px);
+  background: white;
+  box-shadow: var(--shadow-lifted);
+}
+
+/* ========================================
+   13. ORGANIC SECTION DIVIDERS
+   ======================================== */
+.section-divider {
+  width: 100%;
+  height: 60px;
+  background: transparent;
+  position: relative;
+  overflow: hidden;
+}
+
+.section-divider::before {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 120' preserveAspectRatio='none'%3E%3Cpath d='M321.39,56.44c58-10.79,114.16-30.13,172-41.86,82.39-16.72,168.19-17.73,250.45-.39C823.78,31,906.67,72,985.66,92.83c70.05,18.48,146.53,26.09,214.34,3V0H0V27.35A600.21,600.21,0,0,0,321.39,56.44Z' fill='%23FAF5EF'/%3E%3C/svg%3E") no-repeat;
+  background-size: cover;
 }

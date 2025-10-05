@@ -1,122 +1,222 @@
+/* 🏆 Leaderboard - Garden Champions */
+
 .leaderboard-page {
   min-height: 100vh;
-  background: #f9fafb;
-  padding: 40px 20px;
+  background: transparent;
+  padding: var(--space-lg) var(--space-md);
+  animation: fadeInUp 0.8s ease-out;
 }
 
+/* ========================================
+   HEADER - Trophy Garden
+   ======================================== */
 .leaderboard-header {
-  margin-bottom: 32px;
+  margin-bottom: var(--space-lg);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .header-content {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: var(--space-md);
+  animation: fadeInUp 0.6s ease-out;
 }
 
 .trophy-icon {
-  color: #ffc107;
+  color: var(--sunset-amber);
+  animation: pulse 2s ease-in-out infinite;
 }
 
 .leaderboard-header h1 {
-  font-size: 32px;
-  color: #1f2937;
+  font-size: var(--text-h1);
+  color: var(--soil-dark);
   margin: 0;
+  font-family: var(--font-display);
+  font-weight: 800;
 }
 
 .leaderboard-header p {
-  color: #6b7280;
+  color: var(--clay-medium);
   margin: 4px 0 0 0;
+  font-size: var(--text-body);
 }
 
+/* ========================================
+   TABS - Garden Sections
+   ======================================== */
 .leaderboard-tabs {
   display: flex;
-  gap: 12px;
-  margin-bottom: 24px;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .tab-btn {
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 12px 24px;
-  border: 2px solid #e5e7eb;
-  background: white;
-  border-radius: 8px;
+  gap: var(--space-xs);
+  padding: 14px 28px;
+  border: 2px solid var(--mist-gray);
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-soft);
   cursor: pointer;
-  font-size: 16px;
-  font-weight: 500;
-  color: #6b7280;
-  transition: all 0.3s;
+  font-size: var(--text-body);
+  font-weight: 600;
+  color: var(--clay-medium);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  font-family: var(--font-body);
 }
 
 .tab-btn:hover {
-  border-color: #4f46e5;
-  color: #4f46e5;
+  border-color: var(--growth-teal);
+  color: var(--growth-teal);
+  background: white;
+  transform: translateY(-2px);
+  box-shadow: var(--shadow-ground);
 }
 
 .tab-btn.active {
-  border-color: #4f46e5;
-  background: #4f46e5;
+  border-color: transparent;
+  background: var(--gradient-growth);
   color: white;
+  box-shadow: var(--shadow-lifted);
 }
 
+/* ========================================
+   LEADERBOARD CONTENT - Rankings
+   ======================================== */
 .leaderboard-content {
-  background: white;
-  border-radius: 16px;
-  padding: 24px;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(30px) saturate(180%);
+  border-radius: var(--radius-organic);
+  padding: var(--space-lg);
+  box-shadow: var(--shadow-ground);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  max-width: 1200px;
+  margin: 0 auto;
 }
 
 .leaderboard-list {
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: var(--space-sm);
 }
 
+/* ========================================
+   LEADERBOARD ITEMS - User Cards
+   ======================================== */
 .leaderboard-item {
   display: grid;
-  grid-template-columns: 60px 60px 1fr auto;
-  gap: 16px;
+  grid-template-columns: 70px 70px 1fr auto;
+  gap: var(--space-sm);
   align-items: center;
-  padding: 20px;
-  background: #f9fafb;
-  border-radius: 12px;
-  transition: all 0.3s;
+  padding: var(--space-md);
+  background: rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(10px);
+  border-radius: var(--radius-soft);
+  transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  animation: sprout 0.6s ease-out;
+  animation-fill-mode: both;
 }
+
+.leaderboard-item:nth-child(1) { animation-delay: 0.1s; }
+.leaderboard-item:nth-child(2) { animation-delay: 0.15s; }
+.leaderboard-item:nth-child(3) { animation-delay: 0.2s; }
+.leaderboard-item:nth-child(4) { animation-delay: 0.25s; }
+.leaderboard-item:nth-child(5) { animation-delay: 0.3s; }
+.leaderboard-item:nth-child(6) { animation-delay: 0.35s; }
+.leaderboard-item:nth-child(7) { animation-delay: 0.4s; }
+.leaderboard-item:nth-child(8) { animation-delay: 0.45s; }
+.leaderboard-item:nth-child(9) { animation-delay: 0.5s; }
+.leaderboard-item:nth-child(10) { animation-delay: 0.55s; }
 
 .leaderboard-item:hover {
-  background: #f3f4f6;
-  transform: translateX(4px);
+  background: rgba(255, 255, 255, 0.9);
+  transform: translateX(8px) translateY(-2px);
+  box-shadow: var(--shadow-lifted);
 }
 
+/* Top 3 Special Styling */
 .leaderboard-item.rank-1 {
-  background: linear-gradient(135deg, #fef3c7 0%, #fef9c3 100%);
-  border: 2px solid #fbbf24;
+  background: rgba(255, 245, 243, 0.9);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-color: rgba(255, 107, 87, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(255, 107, 87, 0.2);
+  position: relative;
+  overflow: hidden;
+}
+
+.leaderboard-item.rank-1::before {
+  content: '👑';
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  font-size: 4rem;
+  opacity: 0.1;
+  pointer-events: none;
 }
 
 .leaderboard-item.rank-2 {
-  background: linear-gradient(135deg, #e5e7eb 0%, #f3f4f6 100%);
-  border: 2px solid #9ca3af;
+  background: rgba(229, 231, 235, 0.8);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-color: rgba(156, 163, 175, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(156, 163, 175, 0.15);
 }
 
 .leaderboard-item.rank-3 {
-  background: linear-gradient(135deg, #fed7aa 0%, #fde68a 100%);
-  border: 2px solid #f97316;
+  background: rgba(254, 215, 170, 0.6);
+  backdrop-filter: blur(20px) saturate(180%);
+  border-color: rgba(249, 115, 22, 0.3);
+  box-shadow: 0 8px 32px 0 rgba(249, 115, 22, 0.15);
 }
 
+/* ========================================
+   RANK DISPLAY - Position Badges
+   ======================================== */
 .rank {
-  font-size: 32px;
-  font-weight: 700;
+  font-size: 2rem;
+  font-weight: 800;
   text-align: center;
+  font-family: var(--font-display);
+  color: var(--soil-dark);
 }
 
+.leaderboard-item.rank-1 .rank {
+  color: var(--bloom-coral);
+  text-shadow: 0 2px 8px rgba(255, 107, 87, 0.3);
+}
+
+.leaderboard-item.rank-2 .rank {
+  color: var(--clay-medium);
+}
+
+.leaderboard-item.rank-3 .rank {
+  color: var(--sunset-amber);
+}
+
+/* ========================================
+   USER AVATAR - Profile Pictures
+   ======================================== */
 .user-avatar {
-  width: 60px;
-  height: 60px;
+  width: 70px;
+  height: 70px;
   border-radius: 50%;
   overflow: hidden;
   border: 3px solid white;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(44, 36, 22, 0.15);
+  transition: all 0.3s ease;
+}
+
+.leaderboard-item:hover .user-avatar {
+  transform: scale(1.1);
+  box-shadow: 0 8px 24px rgba(44, 36, 22, 0.25);
+  animation: breathe 2s ease-in-out infinite;
 }
 
 .user-avatar img {
@@ -131,42 +231,63 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+  background: var(--gradient-growth);
   color: white;
-  font-size: 24px;
-  font-weight: 700;
+  font-size: 1.75rem;
+  font-weight: 800;
+  font-family: var(--font-display);
 }
 
+/* ========================================
+   USER DETAILS - Name & Skills
+   ======================================== */
 .user-details {
   flex: 1;
+  min-width: 0;
 }
 
 .user-details h3 {
-  font-size: 18px;
-  color: #1f2937;
-  margin: 0 0 8px 0;
+  font-size: var(--text-h3);
+  color: var(--soil-dark);
+  margin: 0 0 var(--space-xs) 0;
+  font-family: var(--font-display);
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
 }
 
 .user-skills {
   display: flex;
-  gap: 8px;
+  gap: var(--space-xs);
   flex-wrap: wrap;
 }
 
 .skill-badge {
-  padding: 4px 12px;
-  background: white;
-  border-radius: 16px;
-  font-size: 12px;
-  font-weight: 500;
-  color: #4f46e5;
-  border: 1px solid #e5e7eb;
+  padding: 6px 14px;
+  background: rgba(44, 185, 169, 0.15);
+  backdrop-filter: blur(5px);
+  border-radius: var(--radius-full);
+  font-size: var(--text-tiny);
+  font-weight: 600;
+  color: var(--growth-teal);
+  border: 1px solid rgba(44, 185, 169, 0.3);
+  transition: all 0.3s ease;
 }
 
+.skill-badge:hover {
+  transform: scale(1.05);
+  background: rgba(44, 185, 169, 0.25);
+  animation: wiggle 0.5s ease;
+}
+
+/* ========================================
+   USER STATS - Ratings & Swaps
+   ======================================== */
 .user-stats {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: var(--space-xs);
   align-items: flex-end;
 }
 
@@ -178,71 +299,131 @@
 
 .stat-item.secondary {
   opacity: 0.7;
-  font-size: 14px;
+  font-size: var(--text-small);
 }
 
 .stat-value {
-  font-size: 20px;
-  font-weight: 700;
-  color: #1f2937;
+  font-size: var(--text-h2);
+  font-weight: 800;
+  color: var(--soil-dark);
+  font-family: var(--font-display);
 }
 
 .stat-label {
-  font-size: 14px;
-  color: #6b7280;
+  font-size: var(--text-small);
+  color: var(--clay-medium);
+  font-weight: 500;
 }
 
+/* ========================================
+   EMPTY STATE - No Data
+   ======================================== */
 .no-data {
   text-align: center;
-  padding: 80px 20px;
+  padding: var(--space-xl) var(--space-md);
+  animation: fadeInUp 0.8s ease-out;
 }
 
 .no-data svg {
-  color: #9ca3af;
-  margin-bottom: 16px;
+  color: var(--clay-medium);
+  margin-bottom: var(--space-md);
+  opacity: 0.5;
 }
 
 .no-data p {
-  color: #6b7280;
-  font-size: 16px;
+  color: var(--clay-medium);
+  font-size: var(--text-body);
+  max-width: 400px;
+  margin: 0 auto;
+  line-height: 1.7;
 }
 
+/* ========================================
+   RESPONSIVE DESIGN
+   ======================================== */
 @media (max-width: 768px) {
+  .leaderboard-page {
+    padding: var(--space-md) var(--space-sm);
+  }
+
   .leaderboard-item {
-    grid-template-columns: 50px 50px 1fr;
-    gap: 12px;
+    grid-template-columns: 50px 60px 1fr;
+    gap: var(--space-sm);
+    padding: var(--space-sm);
   }
 
   .user-stats {
     grid-column: 2 / -1;
     flex-direction: row;
     justify-content: flex-start;
-    margin-top: 8px;
+    margin-top: var(--space-xs);
+    gap: var(--space-md);
   }
 
   .rank {
-    font-size: 24px;
+    font-size: 1.5rem;
   }
 
   .user-avatar {
-    width: 50px;
-    height: 50px;
+    width: 60px;
+    height: 60px;
   }
 
   .avatar-placeholder {
-    font-size: 20px;
+    font-size: 1.5rem;
   }
 
   .user-details h3 {
-    font-size: 16px;
+    font-size: var(--text-body);
   }
 
   .stat-value {
-    font-size: 18px;
+    font-size: var(--text-h3);
   }
 
   .header-content {
     flex-direction: column;
     align-items: flex-start;
   }
+
+  .leaderboard-tabs {
+    width: 100%;
+    overflow-x: auto;
+    padding-bottom: var(--space-xs);
+  }
+
+  .tab-btn {
+    white-space: nowrap;
+    padding: 12px 20px;
+  }
+
+  .leaderboard-content {
+    padding: var(--space-md);
+  }
+
+  .skill-badge {
+    font-size: 0.625rem;
+    padding: 4px 10px;
+  }
+}
+
+/* ========================================
+   ANIMATIONS - Trophy Shine
+   ======================================== */
+@keyframes trophy-shine {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.7;
+    transform: scale(1.1);
+  }
+}
+
+.leaderboard-item.rank-1:hover {
+  animation: none;
+}
+
+.leaderboard-item.rank-1 .rank {
+  animation: trophy-shine 2s ease-in-out infinite;
 }
