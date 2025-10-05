@@ -94,7 +94,7 @@ const UserProfile = () => {
   }
 
   // Check if viewing own profile
-  const isOwnProfile = currentUser && currentUser._id === userId;
+  const isOwnProfile = currentUser && currentUser._id === userId || currentUser && String(currentUser._id) === String(userId);
 
   return (
     <div className="user-profile-page">

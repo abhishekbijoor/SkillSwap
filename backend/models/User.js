@@ -47,7 +47,7 @@ const userSchema = new mongoose.Schema(
     },
     profile: {
       name: { type: String, required: true },
-      email: { type: String, required: true, unique: true },
+      email: { type: String, required: true },
       dob: Date,
       phone: String,
       location: {

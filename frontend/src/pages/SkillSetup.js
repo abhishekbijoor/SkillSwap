@@ -22,6 +22,17 @@ const SkillSetup = () => {
     willing_to_teach: true,
   });
 
+  // Certifications for current teaching skill being added
+  const [certifications, setCertifications] = useState([]);
+  const [certForm, setCertForm] = useState({
+    name: "",
+    issuing_org: "",
+    issue_date: "",
+    credential_url: "",
+  });
+
+  const [showCertModal, setShowCertModal] = useState(false);
+
   // Learning skill form
   const [learningForm, setLearningForm] = useState({
     name: "",
@@ -30,12 +41,30 @@ const SkillSetup = () => {
     urgency: "Medium",
   });
 
+  const addCertification = (e) => {
+    e.preventDefault();
+    if (certForm.name.trim() && certForm.issuing_org.trim()) {
+      setCertifications([...certifications, certForm]);
+      setCertForm({
+        name: "",
+        issuing_org: "",
+        issue_date: "",
+        credential_url: "",
+      });
+      setShowCertModal(false);
+    }
+  };
+
+  const removeCertification = (index) => {
+    setCertifications(certifications.filter((_, i) => i !== index));
+  };
+
   const addTeachingSkill = (e) => {
     e.preventDefault();
     if (teachingForm.name.trim()) {
       setSkillsTeaching([
         ...skillsTeaching,
-        { ...teachingForm, certifications: [] },
+        { ...teachingForm, certifications: certifications },
       ]);
       setTeachingForm({
         name: "",
@@ -43,6 +72,7 @@ const SkillSetup = () => {
         years_experience: "1-3",
         willing_to_teach: true,
       });
+      setCertifications([]);
     }
   };
 
@@ -166,6 +196,52 @@ const SkillSetup = () => {
                   <Plus size={20} />
                 </button>
               </div>
+
+              {/* Certifications Section */}
+              <div className="certifications-section">
+                <div className="cert-header">
+                  <h4>Certifications (Optional)</h4>
+                  <button
+                    type="button"
+                    onClick={() => setShowCertModal(true)}
+                    className="btn btn-secondary btn-sm"
+                  >
+                    <Award size={16} /> Add Certification
+                  </button>
+                </div>
+
+                {certifications.length > 0 && (
+                  <div className="cert-list">
+                    {certifications.map((cert, index) => (
+                      <div key={index} className="cert-item">
+                        <div className="cert-info">
+                          <Award size={16} className="cert-icon" />
+                          <div>
+                            <strong>{cert.name}</strong>
+                            <span className="cert-org">
+                              {cert.issuing_org}
+                              {cert.issue_date &&
+                                ` • ${new Date(
+                                  cert.issue_date
+                                ).toLocaleDateString("en-US", {
+                                  year: "numeric",
+                                  month: "short",
+                                })}`}
+                            </span>
+                          </div>
+                        </div>
+                        <button
+                          type="button"
+                          onClick={() => removeCertification(index)}
+                          className="remove-cert-btn"
+                        >
+                          <X size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             </form>
 
             <div className="skills-list">
@@ -180,6 +256,12 @@ const SkillSetup = () => {
                       <span className="skill-exp">
                         {skill.years_experience} experience
                       </span>
+                      {skill.certifications && skill.certifications.length > 0 && (
+                        <span className="cert-badge">
+                          <Award size={14} /> {skill.certifications.length}{" "}
+                          certification{skill.certifications.length > 1 ? "s" : ""}
+                        </span>
+                      )}
                     </div>
                   </div>
                   <button
@@ -281,6 +363,85 @@ const SkillSetup = () => {
           </div>
         </div>
       </div>
+
+      {/* Certification Modal */}
+      {showCertModal && (
+        <div
+          className="modal-overlay"
+          onClick={() => setShowCertModal(false)}
+        >
+          <div className="modal-content" onClick={(e) => e.stopPropagation()}>
+            <h2>Add Certification</h2>
+            <form onSubmit={addCertification}>
+              <div className="form-group">
+                <label className="form-label">Certification Name *</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g., AWS Certified Solutions Architect"
+                  value={certForm.name}
+                  onChange={(e) =>
+                    setCertForm({ ...certForm, name: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Issuing Organization *</label>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="e.g., Amazon Web Services"
+                  value={certForm.issuing_org}
+                  onChange={(e) =>
+                    setCertForm({ ...certForm, issuing_org: e.target.value })
+                  }
+                  required
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Issue Date (Optional)</label>
+                <input
+                  type="date"
+                  className="form-input"
+                  value={certForm.issue_date}
+                  onChange={(e) =>
+                    setCertForm({ ...certForm, issue_date: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="form-group">
+                <label className="form-label">Credential URL (Optional)</label>
+                <input
+                  type="url"
+                  className="form-input"
+                  placeholder="https://..."
+                  value={certForm.credential_url}
+                  onChange={(e) =>
+                    setCertForm({ ...certForm, credential_url: e.target.value })
+                  }
+                />
+              </div>
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  onClick={() => setShowCertModal(false)}
+                  className="btn btn-secondary"
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="btn btn-primary">
+                  Add Certification
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
