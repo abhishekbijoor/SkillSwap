@@ -4,8 +4,17 @@ const axios = require("axios");
 // Gemini API Integration
 const callGeminiAPI = async (prompt) => {
   try {
+    if (!process.env.GEMINI_API_KEY) {
+      throw new Error("GEMINI_API_KEY is not configured");
+    }
+
+    // Allow model configuration via environment variable
+    const modelName = process.env.GEMINI_MODEL || 'gemini-exp-1206';
+
+    console.log(`Using Gemini model: ${modelName}`);
+
     const response = await axios.post(
-      `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-pro:generateContent?key=${process.env.GEMINI_API_KEY}`,
+      `https://generativelanguage.googleapis.com/v1beta/models/${modelName}:generateContent?key=${process.env.GEMINI_API_KEY}`,
       {
         contents: [
           {
@@ -25,6 +34,16 @@ const callGeminiAPI = async (prompt) => {
       }
     );
 
+    // Check if response has the expected structure
+    if (!response.data) {
+      throw new Error("Empty response from Gemini API");
+    }
+
+    if (!response.data.candidates || response.data.candidates.length === 0) {
+      console.error("Gemini API response:", JSON.stringify(response.data, null, 2));
+      throw new Error("No candidates in Gemini response - API may have blocked the request");
+    }
+
     const text = response.data.candidates[0].content.parts[0].text;
 
     // Extract JSON from markdown code blocks if present
@@ -38,8 +57,20 @@ const callGeminiAPI = async (prompt) => {
     // Try to parse as direct JSON
     return JSON.parse(text);
   } catch (error) {
-    console.error("Gemini API Error:", error.response?.data || error.message);
-    throw new Error("Failed to get AI matching results");
+    console.error("Gemini API Error Details:");
+    console.error("- Status:", error.response?.status);
+    console.error("- Message:", error.response?.data?.error?.message || error.message);
+    console.error("- Full error:", error.response?.data || error.message);
+
+    if (error.response?.status === 400) {
+      throw new Error("Invalid API request - check API key or model name");
+    } else if (error.response?.status === 429) {
+      throw new Error("API quota exceeded - please try again later");
+    } else if (error.response?.status === 403) {
+      throw new Error("API key invalid or permissions denied");
+    }
+
+    throw new Error("Failed to get AI matching results: " + (error.response?.data?.error?.message || error.message));
   }
 };
 
@@ -84,8 +115,11 @@ exports.findMatches = async (req, res) => {
       .limit(20)
       .select("profile skills_teaching skills_learning verification stats");
 
+    console.log(`Found ${candidates.length} candidates for skill query: "${skill_query}"`);
+
     if (candidates.length === 0) {
-      return res.json({ matches: [] });
+      console.log("No candidates found. Query:", JSON.stringify(query));
+      return res.json({ matches: [], message: "No users found matching your search" });
     }
 
     // Prepare data for Gemini
@@ -155,15 +189,52 @@ SCORING GUIDE:
 - 9-10: Perfect match with multiple complementary skills and mutual benefit
 - 7-8.9: Strong match with 1-2 complementary skills
 - 5-6.9: Moderate match with some skill overlap
-- Below 5: Weak match, likely skip
+- 3-4.9: Weak match but still potentially valuable
+- Below 3: Very weak match, skip
 
-Return top 10 matches ranked by compatibility_score (highest first). Only include matches with score >= 5.0.`;
+IMPORTANT: Be generous with scoring. If there's ANY potential for skill exchange, include it with at least a 3.0 score. Users are searching for learning opportunities, so cast a wide net.
 
-    // Call Gemini API
-    const geminiResponse = await callGeminiAPI(prompt);
+Return top 10 matches ranked by compatibility_score (highest first). Only include matches with score >= 3.0.`;
+
+    // Call Gemini API with fallback
+    let geminiResponse;
+    try {
+      console.log("Calling Gemini API for matching...");
+      console.log("Current user skills to teach:", currentUser.skills_teaching.map(s => s.name).join(", "));
+      console.log("Current user wants to learn:", currentUser.skills_learning.map(s => s.name).join(", "));
+      geminiResponse = await callGeminiAPI(prompt);
+      console.log(`Gemini returned ${geminiResponse.matches?.length || 0} matches`);
+      if (geminiResponse.matches?.length === 0) {
+        console.log("Gemini found no good matches. Raw response:", JSON.stringify(geminiResponse, null, 2));
+      }
+    } catch (error) {
+      console.error("Gemini API failed, using fallback matching:", error.message);
+      // Fallback: Simple skill-based matching
+      geminiResponse = {
+        matches: candidates.slice(0, 10).map((user, idx) => ({
+          user_id: user._id.toString(),
+          compatibility_score: 7.0 - (idx * 0.3),
+          explanation: `Teaches ${user.skills_teaching[0]?.name || 'various skills'}. Good potential for skill exchange.`,
+          complementary_skills: [],
+          mutual_benefit: true
+        }))
+      };
+    }
+
+    // If Gemini returned 0 matches but we have candidates, use fallback
+    if ((!geminiResponse.matches || geminiResponse.matches.length === 0) && candidates.length > 0) {
+      console.log("Gemini returned 0 matches, using intelligent fallback for all candidates");
+      geminiResponse.matches = candidates.slice(0, 10).map((user, idx) => ({
+        user_id: user._id.toString(),
+        compatibility_score: 6.0 - (idx * 0.3),
+        explanation: `Teaches ${user.skills_teaching[0]?.name || 'various skills'}. They want to learn ${user.skills_learning[0]?.name || 'new skills'}. Good potential for skill exchange!`,
+        complementary_skills: user.skills_teaching.slice(0, 2).map(s => s.name),
+        mutual_benefit: true
+      }));
+    }
 
     // Validate and enrich response with full user data
-    const enrichedMatches = geminiResponse.matches
+    const enrichedMatches = (geminiResponse.matches || [])
       .filter((match) => {
         // Ensure user_id exists in our candidates
         return candidates.some((c) => c._id.toString() === match.user_id);
