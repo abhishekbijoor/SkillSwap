@@ -46,8 +46,21 @@ const UserProfile = () => {
       return;
     }
 
+    // Validate required fields
+    if (!requestData.teaching_skill || !requestData.learning_skill) {
+      alert("Please select both skills for the exchange");
+      return;
+    }
+
     try {
-      await sessionAPI.createSwapRequest({
+      console.log("Sending swap request:", {
+        recipient_id: userId,
+        teaching_skill: requestData.teaching_skill,
+        learning_skill: requestData.learning_skill,
+        format: requestData.format,
+      });
+
+      const response = await sessionAPI.createSwapRequest({
         recipient_id: userId,
         skills_exchange: {
           teaching: requestData.teaching_skill,
@@ -58,12 +71,15 @@ const UserProfile = () => {
         scheduled_at: requestData.scheduled_at || null,
       });
 
+      console.log("Swap request created:", response.data);
+
       alert("Swap request sent successfully!");
       setShowRequestModal(false);
       navigate("/sessions");
     } catch (error) {
-      console.error("Error sending request:", error);
-      alert("Failed to send request. Please try again.");
+      console.error("Error sending request:", error.response?.data || error);
+      const errorMessage = error.response?.data?.error || "Failed to send request. Please try again.";
+      alert(errorMessage);
     }
   };
 

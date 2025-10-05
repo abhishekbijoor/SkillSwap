@@ -35,6 +35,7 @@ export const userAPI = {
   getUserById: (userId) => api.get(`/users/${userId}`),
   uploadVerificationDocs: (documents) =>
     api.post("/users/verification/documents", { documents }),
+  getLeaderboard: () => api.get("/users/leaderboard"),
 };
 
 export const matchAPI = {

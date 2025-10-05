@@ -11,6 +11,7 @@ import {
   Award,
   TrendingUp,
   Calendar,
+  Trophy,
 } from "lucide-react";
 import "./Dashboard.css";
 
@@ -52,8 +53,23 @@ const Dashboard = () => {
     }
   };
 
-  const handleLogout = () => {
-    logout({ returnTo: window.location.origin });
+  const handleLogout = async () => {
+    try {
+      // Clear local storage
+      localStorage.removeItem("auth_token");
+
+      // Clear any other stored data
+      localStorage.clear();
+
+      // Logout from Auth0 and redirect to localhost:3000
+      await logout({
+        returnTo: "http://localhost:3000"
+      });
+    } catch (error) {
+      console.error("Logout error:", error);
+      // Fallback: force navigation to landing page
+      window.location.href = "http://localhost:3000";
+    }
   };
 
   return (
@@ -70,6 +86,13 @@ const Dashboard = () => {
               >
                 <Calendar size={20} />
                 My Sessions
+              </button>
+              <button
+                onClick={() => navigate("/leaderboard")}
+                className="nav-link"
+              >
+                <Trophy size={20} />
+                Leaderboard
               </button>
               <button
                 onClick={() => navigate(`/profile/${user._id}`)}

@@ -66,13 +66,21 @@ const SessionDetails = () => {
     }
   };
 
+  const handleMarkCompleted = async () => {
+    if (!window.confirm("Mark this session as completed? You'll be asked to leave a rating.")) {
+      return;
+    }
+
+    setShowFeedbackModal(true);
+  };
+
   const handleSubmitFeedback = async (e) => {
     e.preventDefault();
     try {
       await sessionAPI.submitFeedback(sessionId, feedback);
       setShowFeedbackModal(false);
       fetchSessionDetails();
-      alert("Feedback submitted successfully!");
+      alert("Session completed and feedback submitted successfully!");
     } catch (error) {
       console.error("Error submitting feedback:", error);
       alert("Failed to submit feedback");
@@ -252,17 +260,18 @@ const SessionDetails = () => {
               </div>
             )}
 
+            {/* Mark as Completed - Available for Both Users */}
             {session.status === "accepted" && !hasFeedback && (
-              <div className="feedback-prompt">
-                <p>
-                  Session completed? Leave feedback for {otherUser.profile.name}
+              <div className="completion-section">
+                <p className="completion-message">
+                  Have you completed this skill swap session?
                 </p>
                 <button
-                  onClick={() => setShowFeedbackModal(true)}
-                  className="btn btn-primary"
+                  onClick={handleMarkCompleted}
+                  className="btn btn-primary btn-full"
                 >
-                  <Star size={20} />
-                  Leave Feedback
+                  <Check size={20} />
+                  Mark as Completed & Rate
                 </button>
               </div>
             )}

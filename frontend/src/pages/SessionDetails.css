@@ -316,6 +316,34 @@
   color: #4f46e5;
 }
 
+/* Completion Section */
+.completion-section {
+  padding: 24px;
+  background: #d1fae5;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.completion-message {
+  font-size: 16px;
+  color: #065f46;
+  margin-bottom: 16px;
+  font-weight: 500;
+}
+
+.waiting-completion {
+  padding: 20px;
+  background: #e0e7ff;
+  border-radius: 12px;
+  text-align: center;
+}
+
+.waiting-completion p {
+  color: #4338ca;
+  font-size: 14px;
+  margin: 0;
+}
+
 @media (max-width: 968px) {
   .session-detail-layout {
     grid-template-columns: 1fr;

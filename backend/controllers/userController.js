@@ -89,4 +89,39 @@ const getUserById = async (req, res) => {
   }
 };
 
-module.exports = { initUser, getUserProfile, updateUserProfile, updateSkills, getUserById };
+const getLeaderboard = async (req, res) => {
+  try {
+    // Get top users by rating (minimum 1 swap to be on leaderboard)
+    const topRatedUsers = await User.find({
+      'stats.total_swaps': { $gt: 0 }
+    })
+      .sort({ 'stats.avg_rating': -1, 'stats.total_swaps': -1 })
+      .limit(10)
+      .select('profile.name profile.avatar_url stats skills_teaching');
+
+    // Get top users by swap count
+    const topSwapUsers = await User.find({
+      'stats.total_swaps': { $gt: 0 }
+    })
+      .sort({ 'stats.total_swaps': -1, 'stats.avg_rating': -1 })
+      .limit(10)
+      .select('profile.name profile.avatar_url stats skills_teaching');
+
+    res.json({
+      topRated: topRatedUsers,
+      topSwaps: topSwapUsers
+    });
+  } catch (err) {
+    console.error("Error fetching leaderboard:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+};
+
+module.exports = {
+  initUser,
+  getUserProfile,
+  updateUserProfile,
+  updateSkills,
+  getUserById,
+  getLeaderboard
+};

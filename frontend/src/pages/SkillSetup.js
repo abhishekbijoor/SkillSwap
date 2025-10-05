@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
 import { userAPI } from "../services/api";
@@ -7,12 +7,20 @@ import "./SkillSetup.css";
 
 const SkillSetup = () => {
   const navigate = useNavigate();
-  const { updateUser } = useUser();
+  const { user, updateUser } = useUser();
 
   const [skillsTeaching, setSkillsTeaching] = useState([]);
   const [skillsLearning, setSkillsLearning] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+
+  // Load existing skills when component mounts
+  useEffect(() => {
+    if (user) {
+      setSkillsTeaching(user.skills_teaching || []);
+      setSkillsLearning(user.skills_learning || []);
+    }
+  }, [user]);
 
   // Teaching skill form
   const [teachingForm, setTeachingForm] = useState({
@@ -62,6 +70,17 @@ const SkillSetup = () => {
   const addTeachingSkill = (e) => {
     e.preventDefault();
     if (teachingForm.name.trim()) {
+      // Check for duplicate skill names
+      const isDuplicate = skillsTeaching.some(
+        (skill) => skill.name.toLowerCase() === teachingForm.name.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        setError("This skill is already in your teaching list");
+        setTimeout(() => setError(""), 3000);
+        return;
+      }
+
       setSkillsTeaching([
         ...skillsTeaching,
         { ...teachingForm, certifications: certifications },
@@ -73,12 +92,24 @@ const SkillSetup = () => {
         willing_to_teach: true,
       });
       setCertifications([]);
+      setError("");
     }
   };
 
   const addLearningSkill = (e) => {
     e.preventDefault();
     if (learningForm.name.trim()) {
+      // Check for duplicate skill names
+      const isDuplicate = skillsLearning.some(
+        (skill) => skill.name.toLowerCase() === learningForm.name.toLowerCase()
+      );
+
+      if (isDuplicate) {
+        setError("This skill is already in your learning list");
+        setTimeout(() => setError(""), 3000);
+        return;
+      }
+
       setSkillsLearning([...skillsLearning, learningForm]);
       setLearningForm({
         name: "",
@@ -86,6 +117,7 @@ const SkillSetup = () => {
         goal: "Hobby",
         urgency: "Medium",
       });
+      setError("");
     }
   };
 

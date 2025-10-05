@@ -13,6 +13,7 @@ import MatchResults from "./pages/MatchResults";
 import UserProfile from "./pages/UserProfile";
 import SessionDetails from "./pages/SessionDetails";
 import MySessions from "./pages/MySessions";
+import Leaderboard from "./pages/Leaderboard";
 import Loading from "./components/Loading";
 
 // Protected Route Component
@@ -93,6 +94,14 @@ function App() {
             element={
               // <ProtectedRoute>
               <SessionDetails />
+              // </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/leaderboard"
+            element={
+              // <ProtectedRoute>
+              <Leaderboard />
               // </ProtectedRoute>
             }
           />
